@@ -32,7 +32,7 @@
     function surrogateController() {
       // When this is invoked later by angular, it will be injected with services/locals
       // Snag the injected objects
-      var injected = arguments;
+      var injected = arguments, instance = this, locals = {};;
 
       // We always inject $scope, $injector, and $parse.  Snag those three things.
       var $scope = arguments[arguments.length - 3];
@@ -41,38 +41,43 @@
 
       // Recreate a "locals" array (in case any locals were injected)
       // We map the 'deps' and 'injected' arrays back into an assoc-array
-      var locals = {};
-      for (var i = 0; i < deps.length; i++) {
-        locals[deps[i]] = injected[i];
-      }
+      for (var i = 0; i < deps.length; i++) { locals[deps[i]] = injected[i]; }
 
-      var instance;
-      // Add a $scope.$watch passthrough to the ctrlImpl's prototype
+      // Add a $scope.$watch passthrough onto the ctrlImpl's prototype (and
+      // therefore onto the surrogate controller's prototype as well)
       ctrlImpl.prototype.$watch = function() {
         var args = arguments, watchExpr = args[0];
 
         if (angular.isString(watchExpr)) {
+          // If watchExpr is a String, set up a $parse fn which evaluates against `instance`
           var getExpr = $parse(watchExpr);
-          args[0] = function() {
-            return getExpr(instance);
-          }
+          args[0] = function() { return getExpr(instance); }
         }
 
         return $scope.$watch.apply($scope, args);
       }
 
+      // Add some other $scope passthroughs to ctrlImpl prototype; just because.
       angular.forEach(['$on', '$broadcast', '$emit'], function(fnName) {
         ctrlImpl.prototype[fnName] = function() {
           $scope[fnName].apply($scope, arguments);
         }
       });
 
-      // Finally, return the result of "new ctrlImpl(injectedVars...)"
-      return instance = $injector.instantiate(ctrlImpl, locals);
+      // This worked in 1.2.x but 1.3.0 introduced invoking controllers 'later'
+      // return instance = $injector.instantiate(ctrlImpl, locals);
+
+      // Finally, return the result of calling "ctrlImpl(injectedVars...)" with
+      // `this` bound to the surrogate instance.  This will let the controller code
+      // use 'this' and apply it to the surrogate.
+      $injector.invoke(ctrlImpl, instance, locals);
     }
 
     // Annotate the surrogateController surrogate function with required injectables
     surrogateController.$inject = deps;
+    // Make the surrogate's protoype the ctrlImp's prototype because the surrogate
+    // is what is actually returned and set into the $scope.
+    surrogateController.prototype = ctrlImpl.prototype;
 
     // return the surrogate fn here
     return surrogateController;

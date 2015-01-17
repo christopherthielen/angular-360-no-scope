@@ -1,17 +1,24 @@
-<html>
+<html ng-app="test">
   <head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular.min.js">
-    <script src="https://raw.githubusercontent.com/christopherthielen/angular-360-no-scope/master/angular-360-no-scope.js"
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.js"></script>
+  <!-- // <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular.js"></script> -->
+    <script src="angular-360-no-scope.js"></script>
+
     <script>
-      var app = angular.module("test", ['angular-360-no-scope']);
-      app.controller("MyController", function() {
+    // var app = angular.module("test", ['angular-360-no-scope']);
+    var app = angular.module("test", ['angular-360-no-scope']);
+    app.controller("MyController", function() {
         var ctrl = this;
         ctrl.watchCount = 0;
         ctrl.$watch("foo.bar.baz", function incrementWatchCount() { ctrl.watchCount++; });
       });
     </script>
+
   </head>
-  <body ng-app="test">
+
+
+  <body ng-controller="MyController as ctrl">
     <input ng-model="ctrl.foo.bar.baz">
     <br>
     The watch has been invoked {{ ctrl.watchCount }} times.
