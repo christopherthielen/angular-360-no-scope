@@ -5,7 +5,7 @@
   "description": "$watch your controllerAs controller's data without injecting $scope",
   "homepage": "https://github.com/christopherthielen/angular-360-no-scope",
   "dependencies": {
-    angular: "^1.2.0"
+    "angular": "^1.2.0"
   },
   "devDependencies": {
   },
