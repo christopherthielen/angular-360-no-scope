@@ -1,9 +1,9 @@
 # angular-360-no-scope
 
-## What
+## What?
 ### `$watch` your controllerAs controller's data, without injecting $scope.
 
-## How do I use it
+## How do I use it?
 
 - `npm install angular-360-no-scope`
 - Include angular-360-no-scope.js in your app
@@ -11,7 +11,7 @@
 - Write your controller as usual, but avoid `$scope`
 - Utilize `this.$watch()` as needed
 
-## Why
+## Why?
 
 ### Preface
 When using angular's controllerAs, a controller is given a name and a reference to the controller is placed on the $scope.  When writing the logic for the controller, data is typically stored directly on the controller itself, not on the $scope.  When referencing the data from a template, the data is namespaced by the controllerAs name.  
