@@ -5,7 +5,7 @@
 
 ## How do I use it?
 
-- `npm install angular-360-no-scope`
+- `[npm|bower] install angular-360-no-scope`
 - Include angular-360-no-scope.js in your app
 - Add a dependency on `angular-360-no-scope` to your app module.
 - Write your controller as usual, but avoid `$scope`
