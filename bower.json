@@ -1,0 +1,36 @@
+{
+  "name": "angular-360-no-scope",
+  "version": "0.1.0",
+  "authors": [
+    "Chris Thielen <christopherthielen@ikkyikkyikkypikangzoopboing.com>"
+  ],
+  "description": "",
+  "keywords": [
+    "angular", "angularjs", "controllerAs"
+  ],
+  "license": "MIT",
+  "main": "./angular-360-no-scope.js",
+  "ignore": [
+    "**/.*",
+    "pages",
+    "build",
+    "node_modules",
+    "bower_components",
+    "ui-router-versions",
+    "src",
+    "test",
+    "tests",
+    "Gruntfile.js",
+    "files.js",
+    "package.json",
+    ".bower.json",
+    "*.iml",
+    "*.ipr",
+    "*.iws"
+  ],
+  "dependencies": {
+    "angular": "^1.2.0"
+  },
+  "devDependencies": {
+  }
+}

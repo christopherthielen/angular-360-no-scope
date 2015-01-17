@@ -1,0 +1,17 @@
+{
+  "author": "Christopher Thielen",
+  "name": "angular-360-no-scope",
+  "version": "0.1.0",
+  "description": "$watch your controllerAs controller's data without injecting $scope",
+  "homepage": "https://github.com/christopherthielen/angular-360-no-scope",
+  "dependencies": {
+    angular: "^1.2.0"
+  },
+  "devDependencies": {
+  },
+  "main": "angular-360-no-scope.js",
+  "repository": "",
+  "engines": {
+    "node": "0.10.10"
+  }
+}
