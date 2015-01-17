@@ -45,6 +45,6 @@ app.controller("MyController", function () { // HERE, no $scope is necessary
 
 This lib decorates `$controllerProvider.register` and the `$controller` service.  When a controller is registered with `$controllerProvider`, or when a controller is instantiated with the `$controller()` service, the controller fn passed in is augmented with a `$watch` function (as well as with `$on`, `$broadcast`, and `$emit`).
 
-360-no-scope augments the controller fn by wrapping it in a surrogate controller which is executed instead.  The surrogate is annotated with the same injectable dependencies as the real controller fn.  Then, $scope is added to the dependency list.  When angular instantiates the controller surrogate, the surrogate always gets `$scope`.  It then builds the `$scope` passthrough functions and adds them to the real controller's prototype.  Finally, it instantiates and returns the real controller.
+**360-no-scope** augments the controller fn by wrapping it in a surrogate controller which is executed instead.  The surrogate is annotated with the same injectable dependencies as the real controller fn.  Then, $scope is added to the dependency list.  When angular instantiates the controller surrogate, the surrogate always gets `$scope`.  It then builds the `$scope` passthrough functions and adds them to the real controller's prototype.  Finally, it instantiates and returns the real controller.
 
 
