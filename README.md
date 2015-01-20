@@ -19,7 +19,7 @@ When using angular's controllerAs, a controller is given a name and a reference 
 This provides various benefits, which help us write cleaner, more maintainable code.  See the style guides by [Todd Motto](https://github.com/toddmotto/angularjs-styleguide#controllers) and [John Papa](https://github.com/johnpapa/angularjs-styleguide#controllers) for more details.
 
 ### Still need $scope capabilities
-One oddity of writing ControllerAs code is that we no longer tend to have the `$scope` reference handy.  Besides being a tempting dumping ground for data, `$scope` also provides some important funtionality that we occasionally need such as `$watch` (and $on`, `$broadcast`, and `$emit`).  
+One oddity of writing ControllerAs code is that we no longer tend to have the `$scope` reference handy.  Besides being a tempting dumping ground for data, `$scope` also provides some important funtionality that we occasionally need such as `$watch` (and `$on`, `$broadcast`, and `$emit`).  
 
 A simple mechanism to provide those functions is to inject `$scope` into the controller function.  Then, in order to watch your controller data, you may do something like so: 
 ```javascript
