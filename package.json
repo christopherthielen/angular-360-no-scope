@@ -10,5 +10,9 @@
     "angular": "^1.2.0"
   },
   "main": "angular-360-no-scope.js",
-  "repository": ""
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:christopherthielen/angular-360-no-scope.git"
+  },
+  "bugs": "https://github.com/christopherthielen/angular-360-no-scope/issues"
 }
