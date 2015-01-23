@@ -1,4 +1,6 @@
 (function() {
+  'use strict';
+  
   var app = angular.module('angular-360-no-scope', []);
 
   // Decorate both $controllerProvider.register and $controller service fn
@@ -56,7 +58,20 @@
 
         return $scope.$watch.apply($scope, args);
       }
+      // Add a $scope.$watchCollection passthrough onto the ctrlImpl's prototype (and
+      // therefore onto the surrogate controller's prototype as well)
+      ctrlImpl.prototype.$watchCollection = function() {
+        var args = arguments, watchExpr = args[0];
 
+        if (angular.isString(watchExpr)) {
+          // If watchExpr is a String, set up a $parse fn which evaluates against `instance`
+          var getExpr = $parse(watchExpr);
+          args[0] = function() { return getExpr(instance); }
+        }
+
+        return $scope.$watchCollection.apply($scope, args);
+      }
+      
       // Add some other $scope passthroughs to ctrlImpl prototype; just because.
       angular.forEach(['$on', '$broadcast', '$emit'], function(fnName) {
         ctrlImpl.prototype[fnName] = function() {
