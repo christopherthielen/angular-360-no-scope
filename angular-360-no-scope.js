@@ -1,6 +1,6 @@
 (function() {
   'use strict';
-  
+
   var app = angular.module('angular-360-no-scope', []);
 
   // Decorate both $controllerProvider.register and $controller service fn
@@ -47,36 +47,50 @@
 
       // Add a $scope.$watch passthrough onto the ctrlImpl's prototype (and
       // therefore onto the surrogate controller's prototype as well)
-      ctrlImpl.prototype.$watch = function() {
-        var args = arguments, watchExpr = args[0];
-
-        if (angular.isString(watchExpr)) {
-          // If watchExpr is a String, set up a $parse fn which evaluates against `instance`
-          var getExpr = $parse(watchExpr);
-          args[0] = function() { return getExpr(instance); }
+      ctrlImpl.prototype.$watch = function(watchExpression, listener, objectEquality) {
+        if (angular.isFunction(watchExpression)) {
+          watchExpression = angular.bind(instance, watchExpression);
+        }
+        if (angular.isFunction(listener)) {
+          listener = angular.bind(instance, listener);
+        }
+        if (angular.isString(watchExpression)) {
+          // If watchExpression is a String, set up a $parse fn which evaluates against `instance`
+          var getExpr = $parse(watchExpression);
+          watchExpression = function() { return getExpr(instance); };
         }
 
-        return $scope.$watch.apply($scope, args);
-      }
+        return $scope.$watch.call($scope, watchExpression, listener, objectEquality);
+      };
       // Add a $scope.$watchCollection passthrough onto the ctrlImpl's prototype (and
       // therefore onto the surrogate controller's prototype as well)
-      ctrlImpl.prototype.$watchCollection = function() {
-        var args = arguments, watchExpr = args[0];
-
-        if (angular.isString(watchExpr)) {
-          // If watchExpr is a String, set up a $parse fn which evaluates against `instance`
-          var getExpr = $parse(watchExpr);
-          args[0] = function() { return getExpr(instance); }
+      ctrlImpl.prototype.$watchCollection = function(watchExpression, listener) {
+        if (angular.isFunction(watchExpression)) {
+          watchExpression = angular.bind(instance, watchExpression);
+        }
+        if (angular.isFunction(listener)) {
+          listener = angular.bind(instance, listener);
+        }
+        if (angular.isString(watchExpression)) {
+          // If watchExpression is a String, set up a $parse fn which evaluates against `instance`
+          var getExpr = $parse(watchExpression);
+          watchExpression = function() { return getExpr(instance); };
         }
 
-        return $scope.$watchCollection.apply($scope, args);
-      }
-      
+        return $scope.$watchCollection.call($scope, watchExpression, listener);
+      };
+
+      ctrlImpl.prototype.$on = function(name, listener) {
+        if (angular.isFunction(listener)) {
+          listener = angular.bind(instance, listener);
+        }
+        return $scope.$on.call($scope, name, listener);
+      };
       // Add some other $scope passthroughs to ctrlImpl prototype; just because.
-      angular.forEach(['$on', '$broadcast', '$emit'], function(fnName) {
+      angular.forEach(['$broadcast', '$emit'], function(fnName) {
         ctrlImpl.prototype[fnName] = function() {
           $scope[fnName].apply($scope, arguments);
-        }
+        };
       });
 
       // This worked in 1.2.x but 1.3.0 introduced invoking controllers 'later'

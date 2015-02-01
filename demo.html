@@ -5,27 +5,61 @@
     <script src="angular-360-no-scope.js"></script>
 
     <script>
-      var app = angular.module("test", ['angular-360-no-scope']);
+      var app = angular.module('test', ['angular-360-no-scope']);
 
-      app.controller("MyController", function() {
+      app.controller('MyController', function($log) {
         var ctrl = this;
         ctrl.watchCount = 0;
-        ctrl.$watch("foo.bar.baz", function incrementWatchCount() {
-          ctrl.watchCount++;
-          ctrl.$emit("customEvent");
+        ctrl.watchCollectionCount = 0;
+        ctrl.logEvent = $log.log;
+
+
+        ctrl.$watch('foo.bar.baz', function incrementWatchCount() {
+          this.watchCount++;
+          this.$emit('customEvent', 'watchCount', this.watchCount);
         });
+
+        ctrl.$watchCollection('foo.bar.baz', function incrementWatchCollectionCount() {
+          this.watchCollectionCount++;
+          this.$emit('customEvent', 'watchCollectionCount', this.watchCollectionCount);
+        });
+
+        ctrl.$on('customEvent', function logEvent(event, name, count) {
+          this.logEvent(name, count);
+        });
+
+
+
       });
 
       app.run(function($rootScope) {
-        $rootScope.$on("customEvent", function() { console.log("Custom event! Who wants cake?"); });
+        // $rootScope.$on('customEvent', function(event, count) { console.log(event, count); });
       });
     </script>
   </head>
 
 
   <body ng-controller="MyController as ctrl">
-    <input ng-model="ctrl.foo.bar.baz">
-    <br>
-    The watch has been invoked {{ ctrl.watchCount }} times.
+    <h1>angular-360-no-scope</h1>
+
+    <form>
+      <label>
+        Input:
+        <input type="text" ng-model="ctrl.foo.bar.baz">
+      </label>
+
+      <button>Submit</button>
+
+    </form>
+
+    <ul>
+      <li>
+        The $watch has been invoked {{ ctrl.watchCount }} times.
+      </li>
+      <li>
+        The $watchCollection has been invoked {{ ctrl.watchCollectionCount }} times.
+      </li>
+    </ul>
+
   </body>
 </html>
