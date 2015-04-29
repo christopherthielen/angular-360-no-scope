@@ -11,11 +11,11 @@
       return realRegister(name, makeController(constructor));
     };
 
-    $provide.decorator('$controller', function($delegate) {
+    $provide.decorator('$controller', ['$delegate', function($delegate) {
       return function $controllerDecorator() {
         return $delegate.apply($delegate, arguments);
       }
-    });
+    }]);
   }]);
 
   var injector = angular.injector();
