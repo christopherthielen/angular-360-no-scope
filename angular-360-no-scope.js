@@ -87,7 +87,7 @@
         return $scope.$on.call($scope, name, listener);
       };
       // Add some other $scope passthroughs to ctrlImpl prototype; just because.
-      angular.forEach(['$broadcast', '$emit'], function(fnName) {
+      angular.forEach(['$broadcast', '$emit', '$apply'], function(fnName) {
         ctrlImpl.prototype[fnName] = function() {
           $scope[fnName].apply($scope, arguments);
         };
