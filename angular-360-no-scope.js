@@ -1,18 +1,32 @@
 (function() {
   'use strict';
 
+  // https://gist.github.com/dfkaye/6384439
+  function functionName(fn) {
+    var f = typeof fn == 'function';
+    var s = f && ((fn.name && ['', fn.name]) || fn.toString().match(/function ([^\(]+)/));
+    return (!f && 'not a function') || (s && s[1] || 'anonymous');
+  }
+
   var app = angular.module('angular-360-no-scope', []);
 
   // Decorate both $controllerProvider.register and $controller service fn
   // Have them wrap the incoming controller definition in the makeController surrogate
   app.config([ '$controllerProvider', '$provide', function($controllerProvider, $provide) {
     var realRegister = $controllerProvider.register;
+
     $controllerProvider.register = function registerDecorator(name, constructor) {
       return realRegister(name, makeController(constructor));
     };
 
     $provide.decorator('$controller', ['$delegate', function($delegate) {
       return function $controllerDecorator() {
+        if (arguments.length > 0 && typeof arguments[0] === 'function') {
+          var constructor = arguments[0];
+          if (functionName(constructor) !== 'NgModelController') {
+            arguments[0] = makeController(constructor);
+          }
+        }
         return $delegate.apply($delegate, arguments);
       }
     }]);
